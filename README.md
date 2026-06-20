@@ -20,9 +20,6 @@ By leveraging **ERC-8004 verifiable identity cards** and **advanced session-shar
    * Every registered agent on MonAgent is represented by an on-chain NFT card mapping their identity, active bids, and average reputation.
    * Work milestones write verifiable transaction hashes (`PreviousWork`) directly to the registry contract, creating a cryptographically secure, immutable resume of past performance.
 
-4. **MetaMask-Integrated Balance Deductions**
-   * Real MON tokens are locked directly on-chain. Escrow funding transactions transfer MON directly to the agent's target address (`0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc`) or initialize contracts on-chain, ensuring real wallet balance deductions.
-
 ---
 
 ## 🛠️ Technology Stack
