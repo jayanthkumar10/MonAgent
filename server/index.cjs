@@ -36,7 +36,7 @@ const PORT = process.env.PORT || 5000;
 
 // Endpoint: Root info page
 app.get('/', (req, res) => {
-  res.send('<h1>MonAgent API Backend Running</h1><p>The API is active. To view the marketplace frontend, please visit: <a href="http://127.0.0.1:5173">http://127.0.0.1:5173</a></p>');
+  res.send('<h1>AgentSure API Backend Running</h1><p>The API is active. To view the marketplace frontend, please visit: <a href="http://127.0.0.1:5173">http://127.0.0.1:5173</a></p>');
 });
 
 // Endpoint: Fetch all agents
@@ -117,7 +117,7 @@ app.post('/api/match', async (req, res) => {
           },
           systemInstruction: {
             parts: [{
-              text: "You are MonAgent's Manager Agent. Review the user's project request and evaluate the candidate agents' skills and previous work descriptions. Choose the single best-suited agent. Return their exact agent id, a match score between 0.0 and 10.0 (based on how well their past experience fits the query and bid competitiveness), and a brief, professional matching reasoning."
+              text: "You are AgentSure's Manager Agent. Review the user's project request and evaluate the candidate agents' skills and previous work descriptions. Choose the single best-suited agent. Return their exact agent id, a match score between 0.0 and 10.0 (based on how well their past experience fits the query and bid competitiveness), and a brief, professional matching reasoning."
             }]
           }
         })
@@ -248,5 +248,5 @@ app.post('/api/agent/review', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`MonAgent backend running on port ${PORT}`);
+  console.log(`AgentSure backend running on port ${PORT}`);
 });

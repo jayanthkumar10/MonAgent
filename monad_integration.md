@@ -1,6 +1,6 @@
 # Monad Integration & Parallel Architecture Guide
 
-This document describes how to transition MonAgent's Web3 simulation layer into a live, production-grade integration executing transactions on the Monad network. It also explains the underlying architecture of Monad, how to showcase a live demonstration using MetaMask with a 10 MON budget, and how to write the agent registry to the blockchain.
+This document describes how to transition AgentSure's Web3 simulation layer into a live, production-grade integration executing transactions on the Monad network. It also explains the underlying architecture of Monad, how to showcase a live demonstration using MetaMask with a 10 MON budget, and how to write the agent registry to the blockchain.
 
 ---
 
@@ -24,7 +24,7 @@ graph TD
 2.  **Deferred Execution**: In Monad, consensus and execution are decoupled. The consensus nodes agree on the ordering of transactions *before* executing them. This eliminates the bottleneck of nodes having to execute transactions before reaching consensus, significantly increasing block generation speed and throughput.
 3.  **MonadDb**: A custom database built specifically to support parallel state access. It supports asynchronous, multi-threaded disk I/O, removing the read/write bottlenecks of traditional LevelDB/RocksDB stores used by standard Ethereum clients.
 
-For MonAgent, this means hundreds of micro-escrow locking transactions, agent bid submissions, and reputation validation checks can be executed **simultaneously, instantly, and for fractions of a cent** without experiencing network congestion.
+For AgentSure, this means hundreds of micro-escrow locking transactions, agent bid submissions, and reputation validation checks can be executed **simultaneously, instantly, and for fractions of a cent** without experiencing network congestion.
 
 ---
 
@@ -40,7 +40,7 @@ To interact with Monad, configure your Web3 wallet (e.g. MetaMask, Rabby) with t
 ---
 
 ## 🔌 MetaMask Live Wallet Connection (Implemented!)
-MonAgent is equipped with a live connection that attempts to connect to MetaMask if it's injected. The connection logic is located in [src/components/WalletMock.jsx](file:///c:/monad/src/components/WalletMock.jsx):
+AgentSure is equipped with a live connection that attempts to connect to MetaMask if it's injected. The connection logic is located in [src/components/WalletMock.jsx](file:///c:/monad/src/components/WalletMock.jsx):
 
 1.  **Auto Network Detection & Switch**: When clicking **Connect Wallet**, the app requests accounts and automatically switch the user's wallet to the Monad Testnet (Chain ID `10143`). If the network isn't configured in MetaMask, the app automatically prompts the user to add the network with correct RPC and explorer parameters.
 2.  **Live Balance Tracker**: Once connected, the app fetches the real account balance using `BrowserProvider.getBalance` and tracks it in the top header.
@@ -57,7 +57,7 @@ To showcase a 100% real, secure on-chain transaction without burning or losing t
 ---
 
 ## 🛠️ Deploying the Escrow Smart Contracts
-The contracts are in [contracts/MonAgent.sol](file:///c:/monad/contracts/MonAgent.sol). To deploy them:
+The contracts are in [contracts/AgentSure.sol](file:///c:/monad/contracts/AgentSure.sol). To deploy them:
 
 ### Step 1: Install Dependencies
 ```bash
@@ -90,13 +90,13 @@ async function main() {
   console.log("Deploying contracts with account:", deployer.address);
 
   // Deploy Registry
-  const Registry = await hre.ethers.getContractFactory("MonAgentRegistry");
+  const Registry = await hre.ethers.getContractFactory("AgentSureRegistry");
   const registry = await Registry.deploy();
   await registry.waitForDeployment();
   console.log("Registry deployed to:", await registry.getAddress());
 
   // Deploy Escrow
-  const Escrow = await hre.ethers.getContractFactory("MonAgentEscrow");
+  const Escrow = await hre.ethers.getContractFactory("AgentSureEscrow");
   const escrow = await Escrow.deploy();
   await escrow.waitForDeployment();
   console.log("Escrow deployed to:", await escrow.getAddress());
@@ -112,7 +112,7 @@ Execute with: `npx hardhat run scripts/deploy.js --network monadTestnet`
 ---
 
 ## 💾 Registering all 150 Agents On-Chain
-Yes! It is entirely possible to register all 150 agents on-chain. We added a public `registerAgent` method to [contracts/MonAgent.sol](file:///c:/monad/contracts/MonAgent.sol#L53-L64):
+Yes! It is entirely possible to register all 150 agents on-chain. We added a public `registerAgent` method to [contracts/AgentSure.sol](file:///c:/monad/contracts/AgentSure.sol#L79-L88):
 ```solidity
 function registerAgent(
     string memory _id,
@@ -134,7 +134,7 @@ const agentsData = require("../server/agentsDatabase.cjs");
 
 async function main() {
   const registryAddress = "YOUR_DEPLOYED_REGISTRY_ADDRESS";
-  const Registry = await hre.ethers.getContractFactory("MonAgentRegistry");
+  const Registry = await hre.ethers.getContractFactory("AgentSureRegistry");
   const registry = Registry.attach(registryAddress);
 
   console.log(`Starting registry seeding for ${agentsData.length} agents...`);

@@ -1,6 +1,6 @@
 # Manager Agent Integration & Heuristics
 
-This document provides a detailed overview of the **Manager Agent** implementation in MonAgent, detailing how it works, where the code is located, and how we optimized it for cost-efficiency.
+This document provides a detailed overview of the **Manager Agent** implementation in AgentSure, detailing how it works, where the code is located, and how we optimized it for cost-efficiency.
 
 ---
 
@@ -36,7 +36,7 @@ To make it **cost-efficient** and **smart** (free-tier optimized), the API reque
 *   **Low Max Output Tokens**: We limit output response size by setting `maxOutputTokens: 150` and `temperature: 0.1` to ensure deterministic execution, fast speeds, and minimal token cost.
 *   **Minimalist System Instruction**: The prompt instructs the model to act as a classifier:
     ```
-    You are MonAgent's Manager Agent. Analyze the user's project request and route it to the single best category: 'development' (for building apps, integrations, scripts), 'auditing' (for smart contract security audits, code reviews, gas optimizations), or 'marketing' (for community growth, SEO, spaces coordination, KOLs). Output JSON matching the schema.
+    You are AgentSure's Manager Agent. Analyze the user's project request and route it to the single best category: 'development' (for building apps, integrations, scripts), 'auditing' (for smart contract security audits, code reviews, gas optimizations), or 'marketing' (for community growth, SEO, spaces coordination, KOLs). Output JSON matching the schema.
     ```
 
 ### 2. Local Fallback Heuristics

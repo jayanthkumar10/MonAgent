@@ -128,7 +128,7 @@ export default function WalletMock({
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
 
-        const escrowAddress = localStorage.getItem('monagent_escrow_address') || '';
+        const escrowAddress = localStorage.getItem('agentsure_escrow_address') || localStorage.getItem('monagent_escrow_address') || '';
         let tx;
 
         if (escrowAddress && escrowAddress.startsWith('0x') && escrowAddress.length === 42) {

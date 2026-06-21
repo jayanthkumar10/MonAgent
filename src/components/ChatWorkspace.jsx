@@ -21,6 +21,7 @@ export default function ChatWorkspace({
   const [currentStatus, setCurrentStatus] = useState('analyzing');
   const [escrowReleased, setEscrowReleased] = useState(false);
   const [showVerifySuccess, setShowVerifySuccess] = useState(false);
+  const [workspaceTab, setWorkspaceTab] = useState('chat'); // 'chat' | 'logs' (used on mobile only)
 
   // Review & Rating State
   const [rating, setRating] = useState(5);
@@ -194,11 +195,11 @@ export default function ChatWorkspace({
           if (data.status === 'coding' || data.status === 'testing' || data.status === 'completed') {
             const x402Logs = [
               `[AGENT]: Querying computational verification DB API...`,
-              `[HTTP-CLIENT]: GET https://api.monagent-val.net/v1/verify?query=compile`,
+              `[HTTP-CLIENT]: GET https://api.agentsure-val.net/v1/verify?query=compile`,
               `[HTTP-SERVER]: RESPONSE HTTP/1.1 402 Payment Required`,
               `[HTTP-SERVER]: Header: x-402-payment-instruction: recipient=0x7e8b..., amount=0.0002 MON`,
               `[AGENT]: Initializing Monad Machine Payments Protocol (MPP) auto-settlement...`,
-              `[MPP]: Signed EIP-7702 delegated gas authorization. Gas sponsored by MonAgent.`,
+              `[MPP]: Signed EIP-7702 delegated gas authorization. Gas sponsored by AgentSure.`,
               `[MPP]: Sending 0.0002 MON transaction lock to 0x7e8b...`,
               `[MPP]: Confirmed. Transaction Hash: 0x4a9d7b3cf8912ba00a890472de56ba78cd1234ea5678bc90de1234abde5678ef`,
               `[HTTP-CLIENT]: Resending request with header x-402-payment-proof: 0x4a9d7b3cf8912ba...`,
@@ -264,11 +265,11 @@ export default function ChatWorkspace({
           if (fallbackData.status === 'coding' || fallbackData.status === 'testing' || fallbackData.status === 'completed') {
             const x402Logs = [
               `[AGENT]: Querying computational verification DB API...`,
-              `[HTTP-CLIENT]: GET https://api.monagent-val.net/v1/verify?query=compile`,
+              `[HTTP-CLIENT]: GET https://api.agentsure-val.net/v1/verify?query=compile`,
               `[HTTP-SERVER]: RESPONSE HTTP/1.1 402 Payment Required`,
               `[HTTP-SERVER]: Header: x-402-payment-instruction: recipient=0x7e8b..., amount=0.0002 MON`,
               `[AGENT]: Initializing Monad Machine Payments Protocol (MPP) auto-settlement...`,
-              `[MPP]: Signed EIP-7702 delegated gas authorization. Gas sponsored by MonAgent.`,
+              `[MPP]: Signed EIP-7702 delegated gas authorization. Gas sponsored by AgentSure.`,
               `[MPP]: Sending 0.0002 MON transaction lock to 0x7e8b...`,
               `[MPP]: Confirmed. Transaction Hash: 0x4a9d7b3cf8912ba00a890472de56ba78cd1234ea5678bc90de1234abde5678ef`,
               `[HTTP-CLIENT]: Resending request with header x-402-payment-proof: 0x4a9d7b3cf8912ba...`,
@@ -295,7 +296,7 @@ export default function ChatWorkspace({
   const handleReleaseEscrow = async () => {
     if (escrowReleased) return;
     
-    const storedEscrow = localStorage.getItem('monagent_escrow_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc';
+    const storedEscrow = localStorage.getItem('agentsure_escrow_address') || localStorage.getItem('monagent_escrow_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc';
 
     if (window.ethereum && walletState.isMetaMask && walletState.address) {
       setTerminalLogs(prev => [...prev, `[SYSTEM]: MetaMask request triggered for releaseEscrow()...`]);
@@ -374,7 +375,7 @@ export default function ChatWorkspace({
     setIsSubmittingReview(true);
     let txHash = '0x' + Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
     
-    const storedRegistry = localStorage.getItem('monagent_registry_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc';
+    const storedRegistry = localStorage.getItem('agentsure_registry_address') || localStorage.getItem('monagent_registry_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc';
 
     if (window.ethereum && walletState.isMetaMask && walletState.address) {
       try {
@@ -556,11 +557,65 @@ export default function ChatWorkspace({
         </div>
       )}
 
-      {/* Full-Width Chat Container */}
-      <div className="flex-1 flex-column animate-fadein" style={{ width: '100%' }}>
+      {/* Mobile Tab Switcher */}
+      <div className="workspace-mobile-tabs" style={{
+        display: 'none',
+        borderBottom: '1px solid var(--border)',
+        backgroundColor: 'rgba(255, 255, 255, 0.01)'
+      }}>
+        <button 
+          onClick={() => setWorkspaceTab('chat')} 
+          className={`workspace-tab-btn ${workspaceTab === 'chat' ? 'active' : ''}`}
+          style={{
+            flex: 1,
+            padding: '12px',
+            background: 'transparent',
+            color: workspaceTab === 'chat' ? 'var(--primary)' : 'var(--text-muted)',
+            border: 'none',
+            borderBottom: workspaceTab === 'chat' ? '2px solid var(--primary)' : 'none',
+            fontSize: '12px',
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}
+        >
+          💬 Workspace Chat
+        </button>
+        <button 
+          onClick={() => setWorkspaceTab('logs')} 
+          className={`workspace-tab-btn ${workspaceTab === 'logs' ? 'active' : ''}`}
+          style={{
+            flex: 1,
+            padding: '12px',
+            background: 'transparent',
+            color: workspaceTab === 'logs' ? 'var(--primary)' : 'var(--text-muted)',
+            border: 'none',
+            borderBottom: workspaceTab === 'logs' ? '2px solid var(--primary)' : 'none',
+            fontSize: '12px',
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}
+        >
+          💻 Developer Logs
+        </button>
+      </div>
+
+      {/* Main Workspace Workspace Grid (Responsive) */}
+      <div className="workspace-grid" style={{
+        display: 'grid',
+        gridTemplateColumns: '3fr 2fr', // desktop: 60/40
+        minHeight: '440px',
+        width: '100%'
+      }}>
         
-        {/* Chat Window */}
-        <div className="flex-column" style={{ justifyContent: 'space-between', height: '440px', width: '100%' }}>
+        {/* LEFT COLUMN: Chat Panel */}
+        <div className={`workspace-chat-panel ${workspaceTab === 'chat' ? 'active-panel' : 'inactive-panel'}`} style={{
+          borderRight: '1px solid var(--border)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          height: '440px'
+        }}>
+          {/* Messages List */}
           <div className="flex-1" style={{ padding: '20px 24px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {messages.map((msg, idx) => (
               <div 
@@ -631,6 +686,49 @@ export default function ChatWorkspace({
               <Send size={12} />
             </button>
           </form>
+        </div>
+
+        {/* RIGHT COLUMN: Terminal Console Panel */}
+        <div className={`workspace-logs-panel ${workspaceTab === 'logs' ? 'active-panel' : 'inactive-panel'}`} style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '440px',
+          backgroundColor: '#121214',
+          padding: '20px'
+        }}>
+          <div className="flex-row-between mb-3" style={{ borderBottom: '1px solid #27272a', paddingBottom: '8px' }}>
+            <span style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Terminal size={12} className="text-primary" /> Developer Terminal Console
+            </span>
+            <span style={{ fontSize: '9px', fontFamily: 'var(--mono)', color: 'var(--success)' }}>STATUS: ONLINE</span>
+          </div>
+          <div style={{
+            flex: 1,
+            overflowY: 'auto',
+            fontFamily: 'var(--mono)',
+            fontSize: '11px',
+            color: '#D4D4D4',
+            lineHeight: 1.5,
+            whiteSpace: 'pre-wrap',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px'
+          }}>
+            {terminalLogs.map((log, idx) => {
+              let logColor = '#D4D4D4';
+              if (log.startsWith('[SYSTEM]')) logColor = 'var(--primary)';
+              if (log.startsWith('[AGENT]')) logColor = 'var(--success)';
+              if (log.startsWith('[USER]')) logColor = '#FF9500'; // Orange
+              if (log.startsWith('[x402-MPP]')) logColor = '#FF453A'; // Red
+              
+              return (
+                <div key={idx} style={{ color: logColor }}>
+                  {log}
+                </div>
+              );
+            })}
+            <div ref={logsEndRef} />
+          </div>
         </div>
 
       </div>

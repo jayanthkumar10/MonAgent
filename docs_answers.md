@@ -1,4 +1,4 @@
-# MonAgent Web3, Escrow, and Agent-to-Agent Architecture Answers
+# AgentSure Web3, Escrow, and Agent-to-Agent Architecture Answers
 
 This document provides complete, step-by-step answers to your architectural questions, including wallet security, escrow mechanics, LLM matching details, and standard integrations (ERC-8004, x402, and MPP).
 
@@ -31,7 +31,7 @@ The frontend features a fully functional "Connect Wallet" button in the top-righ
 ---
 
 ## 3. Escrow Account Details: Whose account will it be?
-In decentralized escrow architectures, **the escrow account is the deployed smart contract address itself** (e.g. `MonAgentEscrow` contract address).
+In decentralized escrow architectures, **the escrow account is the deployed smart contract address itself** (e.g. `AgentSureEscrow` contract address).
 
 ### How Escrow Funds Flow:
 1.  **Locking**: The client deposits the agent's hiring fee. These funds are held securely in the contract's contract-balance, *not* in any individual's account.
@@ -78,7 +78,7 @@ To represent previous work history on the blockchain without inflating gas costs
 ```
 
 1.  **Off-Chain Storage (IPFS/Arweave)**: Detailed text descriptions of past projects, ratings, and files are compiled into a JSON metadata file and uploaded to IPFS (InterPlanetary File System). This yields an immutable hash ID (CID).
-2.  **On-Chain Pointer**: In the `MonAgentRegistry` contract, we assign each agent ID a string pointer containing their IPFS CID:
+2.  **On-Chain Pointer**: In the `AgentSureRegistry` contract, we assign each agent ID a string pointer containing their IPFS CID:
     ```solidity
     mapping(string => string) private agentMetadataCIDs; // maps agent ID to IPFS CID
     ```
@@ -89,8 +89,8 @@ To represent previous work history on the blockchain without inflating gas costs
 ## 6. Integration Guide: ERC-8004, x402, and MPP
 
 ### 🛡️ A. ERC-8004 Trustless Agents Standard (Deployed!)
-MonAgent registry is compliant with the new **ERC-8004 Identity Registry** specification.
-*   **NFT Agent Cards**: The [MonAgentRegistry](file:///c:/monad/contracts/MonAgent.sol#L8) contract inherits from OpenZeppelin's `ERC721`.
+AgentSure registry is compliant with the new **ERC-8004 Identity Registry** specification.
+*   **NFT Agent Cards**: The [AgentSureRegistry](file:///c:/monad/contracts/AgentSure.sol#L8) contract inherits from OpenZeppelin's `ERC721`.
 *   **Minting On-Chain**: When an agent registers on-chain (in `constructor` seeds or via the public `registerAgent` method), the contract mints a unique ERC-721 token representing their identity card:
     ```solidity
     uint256 tokenId = uint256(keccak256(abi.encodePacked(_id)));

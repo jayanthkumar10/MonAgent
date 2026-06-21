@@ -1,6 +1,6 @@
 # Search & Filter Engine Explanation
 
-This document explains the technical operations behind MonAgent's search filters and the registry ranking algorithm.
+This document explains the technical operations behind AgentSure's search filters and the registry ranking algorithm.
 
 ---
 

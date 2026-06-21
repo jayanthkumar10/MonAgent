@@ -1,4 +1,4 @@
-/* MonAgent Apple-Inspired Premium CSS Design System & Semantic Layout Engine */
+/* AgentSure Apple-Inspired Premium CSS Design System & Semantic Layout Engine */
 @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap');
 
 :root {
@@ -161,7 +161,7 @@ body {
 .mt-8 { margin-top: 32px; }
 
 /* ==========================================================================
-   MonAgent Apple/Geist UI Design System Elements
+   AgentSure Apple/Geist UI Design System Elements
    ========================================================================== */
 .glass-panel {
   background: var(--bg-card);
@@ -408,4 +408,105 @@ p {
 
 .animate-slideup {
   animation: apple-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ==========================================================================
+   Responsive & Mobile Specific Overrides
+   ========================================================================== */
+.show-on-mobile {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+  .show-on-mobile {
+    display: inline-block !important;
+  }
+  .layout-container {
+    padding: 0 16px !important;
+  }
+  h1 {
+    font-size: 28px !important;
+  }
+  h2 {
+    font-size: 18px !important;
+  }
+  body {
+    padding-bottom: 80px; /* Leave space for bottom navigation bar */
+  }
+
+  /* Grid columns responsive overrides */
+  .grid-cols-3-col {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Mobile Bottom Navigation Bar styling */
+  .mobile-nav-bar {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: rgba(9, 9, 11, 0.96);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    z-index: 99;
+    justify-content: space-around;
+    align-items: center;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .mobile-nav-item {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-family: var(--sans);
+    font-weight: 500;
+    gap: 3px;
+    cursor: pointer;
+    position: relative;
+    padding: 6px 0;
+    width: 64px;
+    transition: color 0.15s ease;
+  }
+  .mobile-nav-item.active {
+    color: var(--primary);
+  }
+  .mobile-nav-item svg {
+    color: var(--text-muted);
+  }
+  .mobile-nav-item.active svg {
+    color: var(--primary);
+    stroke: var(--primary);
+  }
+
+  /* Responsive Workspace Split Toggle styling */
+  .workspace-grid {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+  }
+  .workspace-mobile-tabs {
+    display: flex !important;
+    width: 100%;
+    border-bottom: 1px solid var(--border);
+  }
+  .workspace-chat-panel.inactive-panel,
+  .workspace-logs-panel.inactive-panel {
+    display: none !important;
+  }
+  .workspace-chat-panel.active-panel,
+  .workspace-logs-panel.active-panel {
+    display: flex !important;
+    width: 100% !important;
+  }
+  .workspace-chat-panel {
+    border-right: none !important;
+  }
 }

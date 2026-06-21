@@ -170,7 +170,7 @@ export default function Dashboard({
                     )}
                     {agreement.status !== 'released' && agreement.status !== 'refunded' && (
                       <span className="flex-row-start gap-1">
-                        <ArrowRightLeft size={12} /> Contract locked in `MonAgentEscrow.sol` vault.
+                        <ArrowRightLeft size={12} /> Contract locked in `AgentSureEscrow.sol` vault.
                       </span>
                     )}
                   </div>

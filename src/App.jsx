@@ -36,8 +36,8 @@ export default function App() {
   const [rejectedAgentIds, setRejectedAgentIds] = useState(new Set());
 
   // Smart Contract Configuration State
-  const [escrowAddress, setEscrowAddress] = useState(localStorage.getItem('monagent_escrow_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc');
-  const [registryAddress, setRegistryAddress] = useState(localStorage.getItem('monagent_registry_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc');
+  const [escrowAddress, setEscrowAddress] = useState(localStorage.getItem('agentsure_escrow_address') || localStorage.getItem('monagent_escrow_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc');
+  const [registryAddress, setRegistryAddress] = useState(localStorage.getItem('agentsure_registry_address') || localStorage.getItem('monagent_registry_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc');
 
   // Hired & Agreements State
   const [agreements, setAgreements] = useState([
@@ -265,7 +265,7 @@ export default function App() {
         const signer = await provider.getSigner();
         
         let tx;
-        const storedEscrow = localStorage.getItem('monagent_escrow_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc';
+        const storedEscrow = localStorage.getItem('agentsure_escrow_address') || localStorage.getItem('monagent_escrow_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc';
         
         if (storedEscrow && storedEscrow.startsWith('0x') && storedEscrow.length === 42 && storedEscrow !== '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc') {
           const escrowContract = new ethers.Contract(storedEscrow, [
@@ -338,7 +338,7 @@ export default function App() {
         const signer = await provider.getSigner();
         
         let tx;
-        const storedEscrow = localStorage.getItem('monagent_escrow_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc';
+        const storedEscrow = localStorage.getItem('agentsure_escrow_address') || localStorage.getItem('monagent_escrow_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc';
 
         if (storedEscrow && storedEscrow.startsWith('0x') && storedEscrow.length === 42 && storedEscrow !== '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc') {
           const escrowContract = new ethers.Contract(storedEscrow, [
@@ -460,7 +460,7 @@ export default function App() {
               color: '#fff',
               fontSize: '15px'
             }}>
-              M
+              A
             </div>
             <span style={{ 
               fontWeight: 800, 
@@ -468,12 +468,12 @@ export default function App() {
               letterSpacing: '0.05em', 
               color: 'var(--text-main)' 
             }}>
-              Mon<span style={{ color: 'var(--primary)' }}>Agent</span>
+              Agent<span style={{ color: 'var(--primary)' }}>Sure</span>
             </span>
           </div>
 
           {/* Navigation Middle Tabs */}
-          <nav className="flex-row-start gap-1">
+          <nav className="desktop-nav flex-row-start gap-1">
             {userMode === 'client' ? (
               <>
                 <button 
@@ -566,7 +566,8 @@ export default function App() {
                 fontWeight: 700
               }}
             >
-              {userMode === 'client' ? '💼 Client View' : '⚙️ Builder View'}
+              <span className="hide-on-mobile">{userMode === 'client' ? '💼 Client View' : '⚙️ Builder View'}</span>
+              <span className="show-on-mobile">{userMode === 'client' ? '💼 Client' : '⚙️ Builder'}</span>
             </button>
 
             <button 
@@ -602,8 +603,8 @@ export default function App() {
                 }}
               >
                 <Wallet size={12} />
-                <span>{walletState.balance.toFixed(2)} MON</span>
-                <span style={{ opacity: 0.3 }}>|</span>
+                <span className="hide-on-mobile">{walletState.balance.toFixed(2)} MON</span>
+                <span className="hide-on-mobile" style={{ opacity: 0.3 }}>|</span>
                 <span>{walletState.address.substring(0, 6)}...</span>
               </button>
             ) : (
@@ -612,7 +613,9 @@ export default function App() {
                 className="btn-cyber-accent"
                 style={{ padding: '6px 12px', fontSize: '12px' }}
               >
-                <Wallet size={12} /> Connect Wallet
+                <Wallet size={12} />
+                <span className="hide-on-mobile">Connect Wallet</span>
+                <span className="show-on-mobile">Connect</span>
               </button>
             )}
           </div>
@@ -869,7 +872,7 @@ export default function App() {
                           try {
                             const provider = new ethers.BrowserProvider(window.ethereum);
                             const signer = await provider.getSigner();
-                            const storedEscrow = localStorage.getItem('monagent_escrow_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc';
+                            const storedEscrow = localStorage.getItem('agentsure_escrow_address') || localStorage.getItem('monagent_escrow_address') || '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc';
 
                             let tx;
                             if (storedEscrow && storedEscrow.startsWith('0x') && storedEscrow.length === 42 && storedEscrow !== '0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc') {
@@ -962,7 +965,7 @@ export default function App() {
                   How Session Allowances Work
                 </h3>
                 <p style={{ fontSize: '11px', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '12px' }}>
-                  MonAgent supports time-bound, client-delegated spending vaults. Clients can authorize a micro-allowance of MON tokens to an agent's hot key.
+                  AgentSure supports time-bound, client-delegated spending vaults. Clients can authorize a micro-allowance of MON tokens to an agent's hot key.
                 </p>
                 <p style={{ fontSize: '11px', color: 'var(--text-secondary)', lineHeight: 1.5, marginBottom: '12px' }}>
                   This allows the agent to withdraw gas budgets or pay third-party API providers autonomously without requiring the client's signature prompt for every sub-execution.
@@ -978,7 +981,7 @@ export default function App() {
                   lineHeight: 1.4
                 }}>
                   // On-chain function signature<br/>
-                  MonAgentEscrow.agentWithdrawal(<br/>
+                  AgentSureEscrow.agentWithdrawal(<br/>
                   &nbsp;&nbsp;bytes32 agreementId,<br/>
                   &nbsp;&nbsp;uint256 amount<br/>
                   );
@@ -999,7 +1002,7 @@ export default function App() {
         color: 'var(--text-muted)'
       }}>
         <div className="layout-container flex-row-between flex-wrap gap-4">
-          <p>© 2026 MonAgent. Autonomous Agent Registry.</p>
+          <p>© 2026 AgentSure. Autonomous Agent Registry.</p>
           <div className="flex-row-start gap-2">
             <span className="badge-monad flex-row-start gap-2" style={{ border: 'none', background: 'transparent', padding: 0 }}>
               <span className="pulse-dot"></span> monad parallel evm devnet
@@ -1206,8 +1209,8 @@ export default function App() {
 
               <button 
                 onClick={() => {
-                  localStorage.setItem('monagent_escrow_address', escrowAddress);
-                  localStorage.setItem('monagent_registry_address', registryAddress);
+                  localStorage.setItem('agentsure_escrow_address', escrowAddress);
+                  localStorage.setItem('agentsure_registry_address', registryAddress);
                   setIsSettingsOpen(false);
                   alert('MetaMask and contract configurations saved.');
                 }}
@@ -1220,6 +1223,86 @@ export default function App() {
           </div>
         </div>
       )}
+      {/* Mobile Bottom Navigation Bar */}
+      <div className="mobile-nav-bar">
+        {userMode === 'client' ? (
+          <>
+            <button 
+              onClick={() => {
+                setActiveTab('matching');
+                setSelectedAgent(null);
+              }}
+              className={`mobile-nav-item ${activeTab === 'matching' ? 'active' : ''}`}
+            >
+              <Cpu size={18} />
+              <span>Matching</span>
+            </button>
+            <button 
+              onClick={() => {
+                setActiveTab('directory');
+                setSelectedAgent(null);
+              }}
+              className={`mobile-nav-item ${activeTab === 'directory' ? 'active' : ''}`}
+            >
+              <Users size={18} />
+              <span>Directory</span>
+            </button>
+            <button 
+              onClick={() => {
+                setActiveTab('dashboard');
+                setSelectedAgent(null);
+              }}
+              className={`mobile-nav-item ${activeTab === 'dashboard' ? 'active' : ''}`}
+            >
+              <Briefcase size={18} />
+              <span>Dashboard</span>
+            </button>
+            {hiredAgent && (
+              <button 
+                onClick={() => setActiveTab('workspace')}
+                className={`mobile-nav-item ${activeTab === 'workspace' ? 'active' : ''}`}
+              >
+                <span className="pulse-dot" style={{ position: 'absolute', top: '8px', right: '28%' }}></span>
+                <Cpu size={18} style={{ color: 'var(--success)' }} />
+                <span>Workspace</span>
+              </button>
+            )}
+          </>
+        ) : (
+          <>
+            <button 
+              onClick={() => {
+                setActiveTab('builder-gigs');
+                setSelectedAgent(null);
+              }}
+              className={`mobile-nav-item ${activeTab === 'builder-gigs' ? 'active' : ''}`}
+            >
+              <Briefcase size={18} />
+              <span>Gigs</span>
+            </button>
+            <button 
+              onClick={() => {
+                setActiveTab('builder-allowances');
+                setSelectedAgent(null);
+              }}
+              className={`mobile-nav-item ${activeTab === 'builder-allowances' ? 'active' : ''}`}
+            >
+              <Briefcase size={18} style={{ color: 'var(--primary)' }} />
+              <span>Allowances</span>
+            </button>
+            {activeAgreementId && (
+              <button 
+                onClick={() => setActiveTab('workspace')}
+                className={`mobile-nav-item ${activeTab === 'workspace' ? 'active' : ''}`}
+              >
+                <span className="pulse-dot" style={{ position: 'absolute', top: '8px', right: '28%' }}></span>
+                <Cpu size={18} style={{ color: 'var(--success)' }} />
+                <span>Workspace</span>
+              </button>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }

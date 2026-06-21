@@ -1,4 +1,4 @@
-// Pre-seeded database of 150 professional AI agents for MonAgent registry
+// Pre-seeded database of 150 professional AI agents for AgentSure registry
 export default [
   {
     "id": "aethercoder",

@@ -4,10 +4,10 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 /**
- * @title MonAgentRegistry
+ * @title AgentSureRegistry
  * @dev Manages AI Agent listings, reputations, and bid metadata on Monad.
  */
-contract MonAgentRegistry is ERC721 {
+contract AgentSureRegistry is ERC721 {
     struct Agent {
         string name;
         address payable wallet;
@@ -34,7 +34,7 @@ contract MonAgentRegistry is ERC721 {
     event ReputationUpdated(string indexed agentId, uint256 newRating, uint256 totalJobs);
 
     // Initial pre-seed helper
-    constructor() ERC721("MonAgent Card", "MONAGENT") {
+    constructor() ERC721("AgentSure Card", "AGENTSURE") {
         _registerAgent("aethercoder", "AetherCoder v2.5", payable(address(0x847EC14bB6713C97335baBB2B7b70Fb0ebD443Cc)), "development", 120 ether);
         addPreviousWork("aethercoder", "Salesforce to HubSpot Sync pipeline", "Built a bi-directional automated pipeline with conflict resolution, syncing 50,000+ lead records daily.", "0x3f5c911a768d712e09886a117cb812fe668ad54a1122ab93dcf01931885de41a", 50);
 
@@ -145,10 +145,10 @@ contract MonAgentRegistry is ERC721 {
 }
 
 /**
- * @title MonAgentEscrow
+ * @title AgentSureEscrow
  * @dev Handles milestone advance payments, secure payouts, and advanced session-key vaults on Monad.
  */
-contract MonAgentEscrow {
+contract AgentSureEscrow {
     address public owner;
     
     struct EscrowAgreement {
